@@ -5,6 +5,7 @@ import java.util.Comparator;
 // Changeable variables
 int lfrcount = 45;
 float mutationRate = 0.01;
+float diffa , diffm, preva, prevm;
 
 // End
 
@@ -21,8 +22,8 @@ float fitness(LFR lfr) {
 
 // do stuff
 LFR crossover(LFR A, LFR B) {
-  LFR C = new LFR(0, (A.acceleration + B.acceleration)*(0.5 + (random(1)<mutationRate?random(0.05):0) * (random(1)<0.45?1:-1)), (A.maxSpeed + B.maxSpeed)*(0.5 + (random(1)<mutationRate?random(0.05):0) * (random(1)<0.45?1:-1)));
-  return C;
+  LFR C = new LFR(0 , (A.acceleration + B.acceleration)*(0.5 + (random(1)<mutationRate?0.05:0) * (random(1)<0.5?1:-1)), (A.maxSpeed + B.maxSpeed)*(0.5 + (random(1)<mutationRate?0.05:0) * (random(1)<0.5?1:-1)));
+  return C; //No need of friction value in this
 }
 
 void setup() {
@@ -31,7 +32,7 @@ void setup() {
   //distPoints = new float[][]{ { 639, 387 }, { 639, 423 }, { 639, 475 }, { 641, 547 }, { 637, 600 }, { 599, 600 }, { 529, 600 }, { 454, 598 }, { 394, 598 }, { 347, 600 }, { 289, 598 }, { 219, 600 }, { 201, 572 }, { 202, 502 }, { 199, 438 }, { 202, 358 }, { 202, 293 }, { 202, 225 }, { 202, 138 }, { 202, 100 }, { 239, 125 }, { 284, 150 }, { 331, 177 }, { 382, 208 }, { 442, 242 }, { 486, 272 }, { 542, 302 }, { 587, 330 } };
   distPoints = new float[][]{ { 989, 202 }, { 1036, 335 }, { 1039, 523 }, { 974, 635 }, { 759, 635 }, { 544, 670 }, { 392, 650 }, { 372, 520 }, { 514, 488 }, { 639, 532 }, { 766, 525 }, { 826, 408 }, { 777, 255 }, { 487, 248 }, { 274, 238 }, { 114, 267 }, { 79, 435 }, { 106, 590 }, { 181, 652 }, { 244, 620 }, { 276, 548 }, { 286, 450 }, { 294, 115 }, { 360, 70 }, { 779, 83 }, { 989, 80 } };
   for (int i = 0; i < lfrs.length; i++) {
-    lfrs[i] = new LFR(random(-1, 0), random(0, 1), random(1, 7));
+    lfrs[i] = new LFR( 0, random(0, 1), random(1, 7));
   }
   generation = 1;
   time = 1.0/30.0;
@@ -90,9 +91,9 @@ void draw() {
 
     //sort based on fitness
 
-    Arrays.sort(lfrs, new Comparator<LFR>() {
+  Arrays.sort(lfrs, new Comparator<LFR>() {
       public int compare(LFR A, LFR B) {
-        return Double.compare(A.distance + A.time/time, B.distance + A.time/time);
+        return Double.compare(A.distance - (A.time/time)*0.1, B.distance - (A.time/time)*0.1);
         //return Double.compare(A.distance, B.distance);
       }
     }
@@ -106,6 +107,25 @@ void draw() {
     System.out.println("Acceleration: " + lfrs[44].acceleration);
     System.out.println("Friction: " + lfrs[44].friction);
     System.out.println("Max speed: " + lfrs[44].maxSpeed);
+    
+    if(generation>2){
+      diffa = abs(preva - lfrs[44].acceleration);
+      diffm = abs(prevm - lfrs[44].maxSpeed);
+      if( diffa<0.0002 && diffm<0.002 && m==3){  
+        noLoop();
+       
+        text("Optimised Acceleration: " + lfrs[44].acceleration, 545, 374);
+        text("Optimised maxSpeed: " + lfrs[44].maxSpeed, 545, 409);
+        
+      }
+      else if(diffa<0.0002 && diffm<0.0002){
+      m++;
+      }
+      else m=0;
+    
+    }
+    preva=lfrs[44].acceleration;
+    prevm=lfrs[44].maxSpeed;
     
     //noLoop();
     //generate 30 new children using crossover function + mutation
