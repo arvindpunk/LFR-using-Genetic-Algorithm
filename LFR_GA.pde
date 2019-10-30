@@ -21,7 +21,7 @@ float fitness(LFR lfr) {
 
 // do stuff
 LFR crossover(LFR A, LFR B) {
-  LFR C = new LFR((A.friction + B.friction)*(0.5 + (random(1)<mutationRate?0.05:0) * (random(1)<0.5?1:-1)), (A.acceleration + B.acceleration)*(0.5 + (random(1)<mutationRate?0.05:0) * (random(1)<0.5?1:-1)), (A.maxSpeed + B.maxSpeed)*(0.5 + (random(1)<mutationRate?0.05:0) * (random(1)<0.5?1:-1)));
+  LFR C = new LFR(0, (A.acceleration + B.acceleration)*(0.5 + (random(1)<mutationRate?random(0.05):0) * (random(1)<0.45?1:-1)), (A.maxSpeed + B.maxSpeed)*(0.5 + (random(1)<mutationRate?random(0.05):0) * (random(1)<0.45?1:-1)));
   return C;
 }
 
