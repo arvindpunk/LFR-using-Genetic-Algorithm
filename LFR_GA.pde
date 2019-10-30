@@ -5,6 +5,7 @@ import java.util.Comparator;
 // Changeable variables
 int lfrcount = 45;
 float mutationRate = 0.01;
+float diffa , diffm, preva, prevm;
 
 // End
 
@@ -106,6 +107,25 @@ void draw() {
     System.out.println("Acceleration: " + lfrs[44].acceleration);
     System.out.println("Friction: " + lfrs[44].friction);
     System.out.println("Max speed: " + lfrs[44].maxSpeed);
+    
+    if(generation>2){
+      diffa = abs(preva - lfrs[44].acceleration);
+      diffm = abs(prevm - lfrs[44].maxSpeed);
+      if( diffa<0.0002 && diffm<0.002 && m==3){  
+        noLoop();
+       
+        text("Optimised Acceleration: " + lfrs[44].acceleration, 545, 374);
+        text("Optimised maxSpeed: " + lfrs[44].maxSpeed, 545, 409);
+        
+      }
+      else if(diffa<0.0002 && diffm<0.0002){
+      m++;
+      }
+      else m=0;
+    
+    }
+    preva=lfrs[44].acceleration;
+    prevm=lfrs[44].maxSpeed;
     
     //noLoop();
     //generate 30 new children using crossover function + mutation
