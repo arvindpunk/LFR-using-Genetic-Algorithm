@@ -91,9 +91,9 @@ void draw() {
 
     //sort based on fitness
 
-    Arrays.sort(lfrs, new Comparator<LFR>() {
+  Arrays.sort(lfrs, new Comparator<LFR>() {
       public int compare(LFR A, LFR B) {
-        return Double.compare(A.distance + A.time/time, B.distance + A.time/time);
+        return Double.compare(A.distance - (A.time/time)*0.1, B.distance - (A.time/time)*0.1);
         //return Double.compare(A.distance, B.distance);
       }
     }
